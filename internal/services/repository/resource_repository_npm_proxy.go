@@ -153,8 +153,13 @@ func setNpmProxyRepositoryToResourceData(repo *repository.NpmProxyRepository, re
 		return err
 	}
 
-	resourceData.Set("remove_quarantined", repo.RemoveQuarantined)
-	resourceData.Set("remove_non_cataloged", repo.RemoveNonCataloged)
+	if repo.Npm != nil {
+		resourceData.Set("remove_quarantined", repo.RemoveQuarantined)
+		resourceData.Set("remove_non_cataloged", repo.RemoveNonCataloged)
+	} else {
+		resourceData.Set("remove_quarantined", false)
+		resourceData.Set("remove_non_cataloged", false)
+	}
 
 	if repo.Cleanup != nil {
 		if err := resourceData.Set("cleanup", flattenCleanup(repo.Cleanup)); err != nil {
